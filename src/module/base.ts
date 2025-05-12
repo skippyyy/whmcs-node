@@ -13,6 +13,7 @@ export abstract class BaseModule {
         method: "post",
         form: options,
         throwHttpErrors: false,
+        timeout: WhmcsApi.options.timeout ?? 60_000, // 60 seconds default timeout
       });
 
       const data = this.safeJsonParse(res.body);
