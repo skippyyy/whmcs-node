@@ -7,9 +7,11 @@ export interface GetProductsRequest {
 export interface GetProductsResponse {
   result: string;
   totalresults: number;
-  startnumber; number;
+  startnumber: number;
   numreturned: number;
-  products: Product[];
+  products: {
+    product: Product[];
+  };
 }
 
 export interface Product {

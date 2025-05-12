@@ -1,5 +1,4 @@
 export interface AddClientRequest {
-    owner_user_id: number;
     firstname: string;
     lastname: string;
     companyname?: string;
@@ -11,6 +10,7 @@ export interface AddClientRequest {
     postcode: string;
     country: string;
     phonenumber: string;
+    owner_user_id?: number;
     tax_id?: string;
     password2?: string;
     securityqid?: number;

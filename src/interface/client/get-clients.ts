@@ -10,7 +10,9 @@ export interface GetClientsResponse {
     totalresults: number;
     startnumber: number;
     numreturned: number;
-    clients: Client[];
+    clients: {
+        client: Client[];
+    };
 }
 
 export interface Client {
