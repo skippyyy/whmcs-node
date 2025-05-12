@@ -8,20 +8,42 @@ export abstract class BaseModule {
     options.action = methodName;
     options.responsetype = "json";
 
-    return new Promise(async (resolve, reject) => {
-      try {
-        const res = await got(WhmcsApi.options.apiUrl, {
-          method: "post",
-          form: options,
-        });
+    try {
+      const res = await got(WhmcsApi.options.apiUrl, {
+        method: "post",
+        form: options,
+        throwHttpErrors: false,
+      });
 
-        const data = JSON.parse(res.body);
+      const data = this.safeJsonParse(res.body);
 
-        if (data.result != "success") return reject(data);
-        resolve(data);
-      } catch (error) {
-        reject(error);
+      if (!data) {
+        throw new Error(
+          `Invalid JSON response. Status: ${res.statusCode}. Raw Response: ${res.body}`
+        );
       }
-    });
+
+      if (res.statusCode !== 200) {
+        throw new Error(
+          `HTTP Error ${res.statusCode}. Response: ${JSON.stringify(data)}`
+        );
+      }
+
+      return data;
+    } catch (error) {
+      throw new Error(
+        `Request Failed: ${error.message}. ${
+          error.response ? `Response: ${error.response.body}` : ""
+        }`
+      );
+    }
+  }
+
+  private safeJsonParse(body: string): any | null {
+    try {
+      return JSON.parse(body);
+    } catch {
+      return null;
+    }
   }
 }
