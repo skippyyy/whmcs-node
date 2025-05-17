@@ -23,6 +23,7 @@ import { UpdateAnnouncementRequest, UpdateAnnouncementResponse } from "../interf
 import { UpdateToDoItemRequest, UpdateToDoItemResponse } from "../interface/system/update-to-do-item";
 import { WhmcsDetailsRequest, WhmcsDetailsResponse } from "../interface/system/whmcs-details";
 import { BaseModule } from "./base";
+import { serialize } from 'php-serialize';
 
 export class WhmcsSystemService extends BaseModule {
 
@@ -95,7 +96,15 @@ export class WhmcsSystemService extends BaseModule {
   }
   
   public async sendEmail(options: SendEmailRequest): Promise<SendEmailResponse> {
-    return this.request('SendEmail', options);
+    if (!options.customvars) {
+      return this.request('SendEmail', options);
+    }
+    
+    // Handle PHP serialization and base64 encoding for customvars
+    const { customvars, ...restOptions } = options;
+    const serializedVars = Buffer.from(serialize(customvars)).toString('base64');
+    
+    return this.request('SendEmail', { ...restOptions, customvars: serializedVars });
   }
   
   public async setConfigurationValue(options: SetConfigurationValueRequest): Promise<SetConfigurationValueResponse> {

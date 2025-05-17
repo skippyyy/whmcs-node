@@ -3,8 +3,8 @@ export interface SendEmailRequest {
   id?: number;
   customtype?: string;
   custommessage?: string;
-  cstuomsubject?: string;
-  customvars?: any[];
+  customsubject?: string;
+  customvars?: Record<string, any>;
 }
 
 export interface SendEmailResponse {

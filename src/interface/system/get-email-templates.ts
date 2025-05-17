@@ -6,7 +6,9 @@ export interface GetEmailTemplatesRequest {
 export interface GetEmailTemplatesResponse {
   result: string;
   totalresults: number;
-  emailtemplates: EmailTemplate[];
+  emailtemplates: {
+    emailtemplate: EmailTemplate[];
+  };
 }
 
 export interface EmailTemplate {
